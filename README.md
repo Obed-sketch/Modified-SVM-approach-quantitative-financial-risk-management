@@ -1,4 +1,8 @@
-# Modified-SVM-approach-quantitative-financial-risk-management
+# Application of Unbalanced Data Classification
+# Algorithm in Quantitative Financial Risk Management
+To cite this article: JinPeng Zhu and HanChen Wang 2020 J. Phys.: Conf. Ser. 1648 042093
+
+**Modified-SVM-approach-quantitative-financial-risk-management**
 The paper focuses on applying an unbalanced data classification algorithm, specifically a modified SVM approach, for quantitative financial risk management. The key components mentioned are the BADASYN algorithm for handling imbalanced data, integrating negative correlation learning with AdaBoost for SVM, and evaluating using metrics like G-mean, F-measure, and AUC.
 
 1. **Data Preparation**: They selected data from the Chinese stock market from 2017 to 2018, focusing on extreme financial risks. The features include technical indicators and possibly sentiment data.
@@ -56,6 +60,28 @@ May lead to overfitting if the dataset is too small.
 4. **Evaluation Metrics**: They use G-mean, F-measure, and AUC instead of accuracy due to the imbalanced nature of the data.
 
 5. **4. Negative Correlation Learning with AdaBoost**: The paper combines AdaBoost with negative correlation learning to diversify the ensemble. This involves training multiple SVMs where each subsequent model focuses on samples that previous models found hard to classify, while also penalizing correlation between models. Implementing this would require customizing the AdaBoost algorithm to include a penalty term for correlation.
+
+**6. Key implementation notes:**
+
+**Data Preparation:**
+Uses Yahoo Finance to get stock data
+Calculates technical indicators (MA, RSI, Volatility)
+Creates binary labels for extreme risk events
+**BADASYN:**
+Identifies borderline minority samples
+Generates synthetic samples near decision boundaries
+Balances class distribution
+**zSVM:**
+Inherits from sklearn's SVC
+Adjusts decision boundary using z parameter
+Focuses on minority class prediction
+**NCAB-SVM:**
+Implements negative correlation learning
+Combines AdaBoost with diversity penalty
+Uses weighted ensemble of zSVM models
+Evaluation:
+Implements G-mean metric
+Uses F1-score and AUC for performance assessment
 
 **5. Evaluation Metrics**: Implement functions to calculate G-mean, F-measure, and AUC. Scikit-learn has some of these, but G-mean might need to be custom-coded.
         
