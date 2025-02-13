@@ -1,3 +1,6 @@
+# Algorithm in Quantitative Financial Risk Management
+# To cite this article: JinPeng Zhu and HanChen Wang 2020 J. Phys.: Conf. Ser. 1648 042093
+
 import numpy as np
 import pandas as pd
 from sklearn.svm import SVC
