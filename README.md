@@ -85,3 +85,24 @@ Uses F1-score and AUC for performance assessment
 
 **5. Evaluation Metrics**: Implement functions to calculate G-mean, F-measure, and AUC. Scikit-learn has some of these, but G-mean might need to be custom-coded.
         
+
+---
+
+## About the code
+
+`SVM_Quantitative_risk_management.py` is a re-implementation of the algorithm
+in Zhu & Wang (2020), cited at the top of the file: a custom BADASYN
+oversampler, a modified zSVM, and a negative-correlation AdaBoost ensemble
+(NCAB-SVM), applied to Shanghai Composite (^SSEC) daily data.
+
+## How to run
+
+```bash
+pip install -r requirements.txt
+python SVM_Quantitative_risk_management.py
+```
+
+The script downloads ^SSEC price data for 2017-01-01 to 2018-02-01 from Yahoo
+Finance via `yfinance`, so it needs an internet connection. Note: the "extreme
+risk" label (a 5-day drop worse than -10%) is rare in that window, so results
+depend heavily on how many positive examples the sample happens to contain.

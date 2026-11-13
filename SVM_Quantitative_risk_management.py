@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn.svm import SVC
 from sklearn.ensemble import AdaBoostClassifier
-from sklearn.metrics import roc_auc_score, f1_score
+from sklearn.metrics import roc_auc_score, f1_score, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from imblearn.over_sampling import SMOTE
