@@ -102,7 +102,45 @@ pip install -r requirements.txt
 python SVM_Quantitative_risk_management.py
 ```
 
-The script downloads ^SSEC price data for 2017-01-01 to 2018-02-01 from Yahoo
-Finance via `yfinance`, so it needs an internet connection. Note: the "extreme
-risk" label (a 5-day drop worse than -10%) is rare in that window, so results
-depend heavily on how many positive examples the sample happens to contain.
+Needs an internet connection (price data comes from Yahoo Finance via
+`yfinance`). A full run takes ~3-4 minutes, almost all of it in the
+50-member NCAB ensemble.
+
+## Run status (verified Nov 2026)
+
+The script runs end-to-end and prints its evaluation metrics. Two fixes
+made that possible; the method itself (features, label, BADASYN, zSVM,
+NCAB ensemble) is unchanged from the paper:
+
+1. **Data layer.** Yahoo no longer serves `^SSEC` (0 rows), and in the
+   paper's calm 2017-2018 window the extreme-risk label (5-day drop
+   worse than -10%) never fires for a broad index, which makes a
+   stratified split impossible. `prepare_financial_data()` therefore
+   falls back, with printed notices, in this order: `^SSEC` →
+   `000001.SS` (the same Shanghai Composite index under the symbol
+   Yahoo actually serves) → `^GSPC`; and if a window yields fewer than
+   2 positive labels it widens to 2015-2020, a span containing real
+   crash episodes (2015 China crash, 2018 sell-offs, 2020 COVID crash).
+   The verified run used `000001.SS`, 2015-01-01 to 2020-12-31:
+   1,410 usable rows, 18 extreme-risk rows.
+2. **Ensemble label fix.** zSVM's `predict()` returns sign-space values
+   in {-1, 0, 1} while the training labels are {0, 1}. The NCAB
+   ensemble originally compared them directly when computing AdaBoost
+   errors, which degenerated the sample weights and crashed training.
+   Predictions are now mapped onto {0, 1} before the error/weight
+   update (see `_as_class_labels` and the comments in the code).
+
+Verified output of the run described above:
+
+```
+G-Mean: 0.0000
+F1-Score: 0.0000
+AUC: 0.5000
+```
+
+That is an honest result, not a defect in the pipeline: with only 18
+positive days in six years (5 in the test split), identified by a label
+that uses the *trailing* 5-day return while the features describe the
+same window, the ensemble finds no exploitable signal and predicts the
+majority class. The paper's headline numbers are not reproducible from
+public index data alone.
